@@ -12,3 +12,6 @@
 #### library(plyr)
 #### library(flexdashboard)
 #### Documento flexdasboard com interatividade com shiny
+
+#### Serviço para deploy dashboard na nuvem (exemplo elaborado)
+#### https://rpubs.com/ppconrado/test
