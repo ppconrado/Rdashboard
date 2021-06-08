@@ -1,0 +1,13 @@
+name: Dashboard
+title: Dashboard
+username:
+account: ppconrado
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4242694
+bundleId: 4691577
+url: https://ppconrado.shinyapps.io/Dashboard/
+when: 1623146855.10475
+lastSyncTime: 1623146855.10475
+asMultiple: FALSE
+asStatic: FALSE

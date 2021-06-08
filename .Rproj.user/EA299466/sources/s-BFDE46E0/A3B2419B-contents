@@ -1,0 +1,192 @@
+---
+title: "Trabalho de Estatistica"
+author: "Jose Paulo Archetti Conrado"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social: menu
+    source_code: embed
+runtime: shiny
+---
+
+
+```{r global, include=FALSE}
+library(datasets)
+library(ggplot2)
+library(plotly)
+library(plyr)
+library(flexdashboard)
+# AREA DOS PARAMETROS GLOBAIS: Compartilha com todos os algoritimos
+# load data in 'global' chunk so it can be shared by all users of the dashboard
+data(mtcars)
+mtcars2 <- mtcars[, c("mpg", "cyl", "wt")]
+
+```
+
+Testes de estrada modelos 1974 
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### Qtde modelos e numero de cilindros
+
+```{r}
+# Need a table with frequencies for each category
+cylinders <- table(mtcars$cyl)  # Create table
+#plot(cylinders)
+  # Bar chart
+renderPlot({
+barplot(cylinders)
+  })# Default X-Y plot (lines)
+```
+
+
+### Tendencia dos modelos por numero de cilindros (USA 1974) {data-width=600}
+
+```{r}
+# Need a table with frequencies for each category
+cylinders <- table(mtcars$cyl)  # Create table
+  # Bar chart
+#barplot(cylinders)
+renderPlot({
+plot(cylinders)
+  })# Default X-Y plot (lines)
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Milhas por galao de gasolina e peso do modelo {data-width=600}
+
+```{r}
+library(ggplot2)
+plotOutput("plot1", brush = brushOpts(id = "plot1_brush"))
+output$plot1 <- renderPlot({
+  ggplot(mtcars2, aes(wt, mpg)) + geom_point()
+})
+
+```
+
+### Milhas por galao e numero de cilindros {data-width=600}
+
+```{r}
+library(ggplot2)
+mtcars2 <- mtcars[, c("mpg", "cyl", "wt")]
+renderPlot({
+  ggplot(selectedData(), aes(factor(cyl), mpg))  + geom_boxplot()
+})
+
+```
+Row
+-----------------------------------------------------------------------
+
+### Tabela de referencia {data-width=400}
+
+```{r}
+renderTable({
+  selectedData()
+})
+
+```
+
+### Add Curves to Plot
+
+```{r}
+# Reactive that returns the whole dataset if there is no brush
+selectedData <- reactive({
+  data <- brushedPoints(mtcars2, input$plot1_brush)
+  if (nrow(data) == 0)
+    data <- mtcars2
+  data
+})
+
+renderPlot({
+library(datasets)
+mtcars2 <- mtcars[, c("mpg", "cyl", "wt")]
+  ggplot(selectedData(), aes(factor(cyl), mpg))  + geom_boxplot()
+})
+
+```
+
+
+
+Modelos Similares 
+=======================================================================
+
+
+
+### Modelos USA 1974 similares (Grafico Cluster)
+
+```{r}
+library(datasets)  # Load base packages manually
+
+# Installs pacman ("package manager") if needed
+if (!require("pacman")) install.packages("pacman")
+
+# Use pacman to load add-on packages as desired
+pacman::p_load(pacman, tidyverse) 
+
+# LOAD DATA ################################################
+
+#?mtcars
+head(mtcars)
+cars <- mtcars[, c(1:4, 6:7, 9:11)]  # Select variables
+head(cars)
+
+# COMPUTE AND PLOT CLUSTERS ################################
+
+# Save hierarchical clustering to "hc." This codes uses
+# pipes from dplyr.
+hc <- cars   %>%  # Get cars data
+      dist   %>%  # Compute distance/dissimilarity matrix
+      hclust      # Computer hierarchical clusters
+  
+plot(hc)          # Plot dendrogram
+
+# ADD BOXES TO PLOT ########################################
+
+rect.hclust(hc, k = 2, border = "gray")
+rect.hclust(hc, k = 3, border = "blue")
+rect.hclust(hc, k = 4, border = "green4")
+rect.hclust(hc, k = 5, border = "darkred")
+
+
+```
+
+Quantidade de telefones no mundo
+=======================================================================
+
+### Modelo para implementar um modulo do shiny interativo
+
+```{r, include=FALSE}
+# definicao do modulo shiny (Podera ser definido em um R script separado)
+# Shiny module definition (would typically be defined in a separate R script)
+
+# UI function
+worldPhonesUI <- function(id) {
+  ns <- NS(id)
+  fillCol(height = 600, flex = c(NA, 1), 
+    inputPanel(
+      selectInput(ns("region"), "Region:", choices = colnames(WorldPhones))
+    ),
+    plotOutput(ns("phonePlot"), height = "100%")
+  )
+}
+
+# Server function
+worldPhones <- function(input, output, session) {
+  output$phonePlot <- renderPlot({
+    barplot(WorldPhones[,input$region]*1000, 
+            ylab = "Numero de Telefones", xlab = "Ano")
+  })
+}
+```
+
+```{r}
+# Include the module
+worldPhonesUI("phones")
+callModule(worldPhones, "phones")
+```
+
+
