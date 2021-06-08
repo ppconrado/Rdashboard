@@ -4,6 +4,10 @@
 ### Aluno: Jose Paulo Archetti Conrado
 ### Projeto para gerar dashboard utilizando somente o programa R
 
+#### Link para acessar o Dashboard
+#### https://ppconrado.shinyapps.io/Dashboard
+
+
 ### Pacotes do R instalados:
 
 #### library(datasets)
@@ -13,5 +17,4 @@
 #### library(flexdashboard)
 #### Documento flexdasboard com interatividade com shiny
 
-#### Serviço para deploy dashboard na nuvem (exemplo elaborado)
-#### https://rpubs.com/ppconrado/test
+
