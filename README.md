@@ -1,9 +1,14 @@
-# Rdashboard
+## Dashboard de Estatistica em R
 
-# Trabalho de Estatistica 3 ADS FATEC 2021
-# Projeto para gerar dashboard utilizando somente o programa R
+### Trabalho de Estatistica 3 ADS FATEC 2021
+### Aluno: Jose Paulo Archetti Conrado
+### Projeto para gerar dashboard utilizando somente o programa R
 
-# Pacotes do R instalados:
-# flexdasboard
-# shiny
-# ggplot2
+### Pacotes do R instalados:
+
+#### library(datasets)
+#### library(ggplot2)
+#### library(plotly)
+#### library(plyr)
+#### library(flexdashboard)
+#### Documento flexdasboard com interatividade com shiny
